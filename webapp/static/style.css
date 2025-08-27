@@ -1,0 +1,167 @@
+:root{
+  --bg-900: #05020a;
+  --bg-800: #0b0217;
+  --neon: #8b5cf6; /* main neon */
+  --neon-2: #6d28d9;
+  --muted: #9b90a8;
+}
+
+html,body{
+  height:100%;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.bg-animated{
+  position: fixed; inset: 0; z-index: -1; overflow: hidden; background: radial-gradient(circle at 10% 10%, rgba(139,92,246,0.06), transparent 12%), radial-gradient(circle at 90% 80%, rgba(109,40,217,0.04), transparent 10%), linear-gradient(180deg, var(--bg-900), var(--bg-800));
+}
+
+/* тонкое поле звёзд */
+.bg-animated::after{
+  content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 6px 6px; opacity:0.6; mix-blend-mode: screen; filter: blur(0.8px);
+}
+
+/* три слоя с более строгим градиентом, лёгким движением */
+.bg-animated .bg-layer{ position:absolute; inset:-8%; background-repeat:no-repeat; background-size:cover; transform-origin:center; }
+.bg-animated .layer1{ background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(0,0,0,0.02)); opacity:0.9; filter: blur(18px); }
+.bg-animated .layer2{ background: radial-gradient(800px 300px at 70% 30%, rgba(109,40,217,0.06), transparent); opacity:0.75; filter: blur(30px); }
+.bg-animated .layer3{ background: radial-gradient(900px 400px at 30% 70%, rgba(98,39,171,0.04), transparent); opacity:0.6; filter: blur(48px); }
+
+/* звёздное небо и дымка */
+.stars{ position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.95) 1px, transparent 1px); background-size: 60px 60px; opacity:0.06; mix-blend-mode: screen; pointer-events:none; }
+.stars::after{ content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.95) 1px, transparent 1px); background-size: 180px 180px; opacity:0.03; }
+.haze{ position:absolute; inset:0; pointer-events:none; background: linear-gradient(180deg, rgba(20,6,40,0.04), transparent 20%), radial-gradient(60% 40% at 20% 70%, rgba(139,92,246,0.02), transparent 20%); filter: blur(10px); opacity:0.9; }
+
+
+/* каустики: мягкое движущееся освещение как под водой */
+.bg-animated::before{ content:''; position:absolute; inset:-15%; z-index:-1; pointer-events:none; background: radial-gradient(circle at 20% 30%, rgba(139,92,246,0.06), transparent 12%), radial-gradient(circle at 80% 70%, rgba(109,40,217,0.04), transparent 8%); filter: blur(22px) saturate(120%); animation: caustics 18s ease-in-out infinite; }
+
+@keyframes caustics{
+  0%{transform: translate3d(-10px,-8px,0) rotate(-2deg) scale(1)}
+  50%{transform: translate3d(10px,8px,0) rotate(2deg) scale(1.02)}
+  100%{transform: translate3d(-10px,-8px,0) rotate(-2deg) scale(1)}
+}
+
+/* мелкое медленное течение слоёв */
+.bg-animated .bg-layer{ animation: slow-drift 18s ease-in-out infinite; }
+@keyframes slow-drift{ 0%{transform: translate3d(0,0,0)} 50%{transform: translate3d(15px,-10px,0)} 100%{transform: translate3d(0,0,0)} }
+
+/* пузырьки */
+.bubbles{ position:absolute; inset:0; pointer-events:none; z-index:0; }
+.bubbles .bubble{
+  position:absolute; bottom:-80px; width:80px; height:80px; border-radius:50%;
+  /* почти незаметный liquid-glass: очень тонкая подсветка и слабое размытие */
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.02);
+  backdrop-filter: blur(6px) saturate(110%);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  box-shadow: 0 8px 36px rgba(6,6,18,0.48), inset -6px -4px 18px rgba(255,255,255,0.02);
+  opacity:0.08; transform: translateY(0) scale(0.98);
+  animation: bubble-rise linear infinite;
+  transition: transform 0.36s ease;
+  /* apply very subtle SVG turbulence displacement for restrained refraction */
+  filter: url('#turbulence');
+}
+.bubbles .bubble::before{
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background: radial-gradient(circle at 30% 32%, rgba(255,255,255,0.9), rgba(255,255,255,0.08) 22%, rgba(255,255,255,0.02) 36%, transparent 60%);
+  mix-blend-mode: overlay; filter: blur(1.2px); opacity:0.56;
+}
+.bubbles .bubble::after{
+  /* subtle specular highlight */
+  content:''; position:absolute; left:60%; top:8%; width:34%; height:22%; border-radius:50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.12));
+  transform: rotate(-18deg); opacity:0.64; filter: blur(0.6px);
+}
+@keyframes bubble-rise{
+  0%{ transform: translateY(0) scale(0.9); opacity:0.85 }
+  80%{ opacity:0.55 }
+  100%{ transform: translateY(-120vh) scale(1.02); opacity:0 }
+}
+
+/* dark-themed table */
+.table-wrapper{ background: transparent; }
+.table{
+  background: rgba(255,255,255,0.02);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.table thead th{ background: rgba(255,255,255,0.03); color: #efe9ff; border-bottom:1px solid rgba(255,255,255,0.04); }
+.table tbody td{ color: #ddd6ff; background: transparent; }
+.table tbody tr{ border-bottom:1px solid rgba(255,255,255,0.02); }
+.table tbody tr:hover{ background: rgba(139,92,246,0.035); }
+
+
+.main-wrap{
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.card.glass{
+  background: linear-gradient(180deg, rgba(6,4,16,0.85), rgba(8,3,24,0.85));
+  border: 1px solid rgba(139,92,246,0.12);
+  box-shadow: 0 8px 30px rgba(11,2,30,0.6), 0 0 18px rgba(139,92,246,0.06) inset;
+  color: #f3eeff;
+}
+
+.nav-glass{
+  background: linear-gradient(90deg, rgba(6,3,18,0.9), rgba(8,3,24,0.95));
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  box-shadow: 0 2px 8px rgba(2,1,6,0.6);
+}
+
+.table.table-striped{
+  background: rgba(255,255,255,0.02);
+}
+
+.btn-primary{
+  background: linear-gradient(90deg, var(--neon), var(--neon-2));
+  border: none; color: white; font-weight:600; box-shadow: 0 6px 18px rgba(107,33,168,0.16), 0 0 10px rgba(139,92,246,0.14);
+}
+.btn-primary:hover{ box-shadow: 0 8px 28px rgba(107,33,168,0.22), 0 0 18px rgba(139,92,246,0.22); transform: translateY(-1px); }
+
+/* table */
+.table thead th{ background: rgba(255,255,255,0.03); color: #efe9ff; border-bottom:1px solid rgba(255,255,255,0.04); }
+.table tbody tr:hover{ background: rgba(139,92,246,0.03); }
+.table td, .table th{ vertical-align: middle; }
+
+/* subtle neon accent on left of row */
+.table tbody tr td:first-child{ padding-left: 18px; }
+.table tbody tr:hover td:first-child{ box-shadow: inset 6px 0 0 rgba(139,92,246,0.12); }
+
+.alert{
+  opacity: 0.95;
+}
+
+.footer{
+  color: rgba(255,255,255,0.5);
+}
+
+/* footer visible styling */
+.footer-area{ color: rgba(230,230,255,0.9); }
+.footer-area .footer-main{ font-weight:700; font-size:14px; letter-spacing:0.6px; }
+.footer-area .footer-sub{ font-size:12px; color: rgba(200,200,255,0.6); margin-top:4px; }
+
+/* glints (moving highlights) */
+
+/* starfield: subtle twinkling stars */
+.stars{ position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.95) 1px, transparent 1px); background-size: 60px 60px; opacity:0.06; mix-blend-mode: screen; pointer-events:none; }
+.stars::after{ content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.95) 1px, transparent 1px); background-size: 180px 180px; opacity:0.03; }
+.stars .twinkle{ position:absolute; width:2px; height:2px; background: white; border-radius:50%; opacity:0.0; }
+
+@keyframes twinkle{ 0%{ opacity:0 } 50%{ opacity:0.8 } 100%{ opacity:0 } }
+
+/* shooting star */
+.shoot{ position:absolute; width:160px; height:2px; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.9), rgba(255,255,255,0)); transform: rotate(20deg) translate3d(-50%,-50%,0); filter: blur(1.6px); opacity:0.95; animation: shoot-move 2.2s linear forwards; pointer-events:none; }
+@keyframes shoot-move{ from{ transform: translate3d(-50%,-50%,0) rotate(20deg) scaleX(0.2); opacity:0.9 } to{ transform: translate3d(120%,-120%,0) rotate(20deg) scaleX(1); opacity:0 } }
+
+
+
+/* Dark form inputs for login page */
+.form-control{
+  background: rgba(6,8,20,0.54);
+  color: #e6e9f2;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: none;
+}
+.form-control::placeholder{ color: rgba(230,233,242,0.35); }
+.form-control:focus{ background: rgba(6,8,20,0.7); border-color: rgba(124,58,237,0.42); box-shadow: 0 0 0 0.15rem rgba(124,58,237,0.06); }

@@ -11,19 +11,20 @@ async def main():
     logging.basicConfig(level=logging.INFO)
 
     # 2. Конфигурация и объекты бота
-    config = load_config()
-    bot = Bot(token=config.bot_token)
-    dp = Dispatcher()
+    config = load_config()  
+    bot    = Bot(token=config.bot_token)
+    dp     = Dispatcher()
 
     # 3. Инициализация БД и регистрация хендлеров
     init_db()
+    # передаем в хендлеры сам объект config,
+    # чтобы внутри них читать config.superadmin_id
     register_handlers(dp)
 
     # 4. Запуск поллинга
     try:
         await dp.start_polling(bot)
     finally:
-        # 5. Грейсфул-шаутдаун: закрыть сессию бота
         await bot.session.close()
 
 if __name__ == "__main__":

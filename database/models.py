@@ -13,6 +13,12 @@ class Student(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
 
+# Администраторы
+class Administrator(Base):
+    __tablename__ = "admins"
+    user_id = Column(String, primary_key=True, index=True)
+
+
 # Создание базы данных SQLite и сессии
 
 engine = create_engine('sqlite:///school.db', echo=True)

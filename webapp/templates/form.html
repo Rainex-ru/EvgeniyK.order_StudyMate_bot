@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% if action == 'add' %}
+    <h2>Добавить ученика</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">Имя</label>
+        <input class="form-control" name="name" />
+      </div>
+      <button class="btn btn-primary">Добавить</button>
+    </form>
+  {% else %}
+    <h2>Редактировать ученика #{{ student.id }}</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">Имя</label>
+        <input class="form-control" name="name" value="{{ student.name }}" />
+      </div>
+      <button class="btn btn-primary">Сохранить</button>
+    </form>
+  {% endif %}
+{% endblock %}
